@@ -13,6 +13,9 @@ public class Questions {
         questionList.add("Hva er hovedstaden i Thailand?");
         questionList.add("Hva er hovedstaden i Tyrkia?");
         questionList.add("Hva er hovedstaden i USA?");
+        questionList.add("Hva er hovedstaden i Sverige?");
+        questionList.add("Hva er hovedstaden i Japan?");
+        questionList.add("Hva er hovedstaden i Canada?");
         answerList.add("oslo");
         answerList.add("buenos aires");
         answerList.add("brasilia");
@@ -20,6 +23,11 @@ public class Questions {
         answerList.add("bankok");
         answerList.add("ankara");
         answerList.add("washington dc");
+        answerList.add("stockholm");
+        answerList.add("tokyo");
+        answerList.add("ottawa");
+
+
 
     }
     //Returns question as a String

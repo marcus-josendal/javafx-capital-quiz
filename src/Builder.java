@@ -1,7 +1,5 @@
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -10,18 +8,14 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-import java.util.ArrayList;
-
-
 public class Builder {
 
     //Returns a borderpane. Put in four different nodes in the different positions.
-    public BorderPane returnBorderPane(Node node1, Node node2, Node node3, Node node4){
+    public BorderPane returnBorderPane(Node node1, Node node2, Node node3){
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(node1);
-        borderPane.setRight(node2);
+        borderPane.setCenter(node2);
         borderPane.setBottom(node3);
-        borderPane.setLeft(node4);
 
         return borderPane;
     }
@@ -49,7 +43,7 @@ public class Builder {
         return hbox;
     }
 
-    //Returns a VBox with two nodes. Put in two nodes and spacing between the nodes.
+    //Returns a VBox with two nodes. Put in two nodes and specify the spacing between the nodes.
     public VBox returnVBox2(Node node1, Node node2, double spacing){
         VBox vbox = new VBox();
         vbox.getChildren().add(node1);
@@ -58,5 +52,23 @@ public class Builder {
 
         return vbox;
     }
+    //Returns a VBox with three nodes. Put in three nodes and specify the spacing between the nodes.
+    public VBox returnVBox3(Node node1, Node node2, Node node3, double spacing){
+        VBox vbox = new VBox();
+        vbox.getChildren().add(node1);
+        vbox.getChildren().add(node2);
+        vbox.getChildren().add(node3);
+        vbox.setSpacing(spacing);
 
+        return vbox;
+    }
+
+    public Text returnStaticText(String content, String font, int fontsize, Color color, TextAlignment textposition){
+        Text text = new Text(content);
+        text.setFont(new Font(font, fontsize));
+        text.setFill(color);
+        text.setTextAlignment(textposition);
+
+        return text;
+    }
 }

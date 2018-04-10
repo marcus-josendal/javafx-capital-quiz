@@ -1,16 +1,12 @@
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -18,39 +14,41 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.util.concurrent.TimeUnit;
+
 public class Gui extends Application {
-    //Objects
+
+    //Instances
     private Questions questions = new Questions();
     private Builder builder = new Builder();
     private Images images = new Images();
 
-    //Text
+
+    //Text and textfield
     private Text scoreText = new Text();
     private Text question = new Text();
     private Text questionCounter = new Text();
     private TextField textField = new TextField();
+    private TextField nameField = new TextField();
+
+    //Inner classes
+    private FirstStage firstStage = new FirstStage();
 
     //Buttons
     private Button nextQuestion = new Button("Neste spørsmål");
     private Button submit = new Button("Submit");
+    private Button submitName = new Button("Submit");
 
-    BorderPane borderPane = new BorderPane();
-
-    //Scores and contentrefresher
+    //Score and contentrefresher
     private int contentRefresher = 0;
     private int score = 0;
 
+    //Flag-image
     private ImageView imageView = new ImageView();
 
 
     public void start(Stage primaryStage) {
 
-        imageView.setImage(images.returnImage(0, 600, 400));
-        imageView.setFitHeight(400);
-        imageView.setFitWidth(600);
-
-        nextQuestion.setDefaultButton(false);
-        submit.setDefaultButton(true);
 
         //Put question-text in VBox so it's possible to align.
         VBox textBox = new VBox();
@@ -58,6 +56,16 @@ public class Gui extends Application {
         textBox.setPadding(new Insets(10,10,20,10));
         textBox.getChildren().addAll(question);
         textBox.setAlignment(Pos.CENTER);
+
+        //Sets image
+        imageView.setImage(images.returnImage(0, 600, 400));
+        imageView.setFitHeight(400);
+        imageView.setFitWidth(600);
+
+        //Sets button to defaul so you can click enter.
+        nextQuestion.setDefaultButton(false);
+        submit.setDefaultButton(true);
+
 
         //Styles the questions
         question.setFont(new Font("Arial", 35));
@@ -81,16 +89,16 @@ public class Gui extends Application {
         questionCounter.setFont(new Font("Areal", 35));
         questionCounter.setTextAlignment(TextAlignment.LEFT);
         updateScoreText();
-
         nextQuestion.setOpacity(0);
+
+        //HBox for questioncounter, scoretext and Next Question text
         HBox bottomBox2 = builder.returnHBox3(questionCounter, scoreText, nextQuestion, 140, Pos.CENTER);
+
+        //VBox for the two HBoxes that will be set under the flag
         VBox mainBottomBox = builder.returnVBox2(bottomBox, bottomBox2, 10);
 
-
-        BorderPane borderPane = new BorderPane();
-        borderPane.setTop(textBox);
-        borderPane.setCenter(imageView);
-        borderPane.setBottom(mainBottomBox);
+        //Setting the different nodes to the borderpane.
+        BorderPane borderPane = builder.returnBorderPane(textBox, imageView, mainBottomBox);
 
         //Actionevent for Next-Question button. Triggers returnEvent method
         nextQuestion.setOnAction(event -> {
@@ -114,23 +122,31 @@ public class Gui extends Application {
             }
         });
 
-        primaryStage.setScene(new Scene(borderPane, 700, 600));
-        primaryStage.show();
+        submitName.setOnAction(event -> {
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            primaryStage.setScene(new Scene(borderPane, 700, 600));
+        });
 
+        primaryStage.setScene(firstStage.returnStartScene());
+        primaryStage.show();
     }
 
     //Updates Score Text
-    public void updateScoreText(){
+    private void updateScoreText(){
         scoreText.setText("Score: " + score);
     }
 
     //Updates the Question Counter.
-    public void updateQuestionCounter(){
+    private void updateQuestionCounter(){
         questionCounter.setText(contentRefresher + 1 + "/" + questions.returnQuestionListSize());
     }
 
-    //Method when Next-Question button is pressed
-    public void returnEvent(){
+    //Method when Next-Question button is pressed. Gets next image, question and clears textfield.
+    private void returnEvent(){
 
         contentRefresher++;
 
@@ -138,5 +154,33 @@ public class Gui extends Application {
         question.setText(questions.returnQuestion(contentRefresher));
         nextQuestion.setOpacity(0);
         textField.clear();
+    }
+
+    //Inner class for start-stage
+    class FirstStage{
+
+        public Scene returnStartScene(){
+
+            //Content for start scene
+            HBox nameBox = builder.returnHBox2(nameField, submitName, 10, Pos.CENTER);
+
+            //Text
+            Text firstLine = builder.returnStaticText("Velkommen til denne hovedstad-quizen. Bruk norske navn for hovedstedene.",
+                    "Arial", 20, Color.BLUE, TextAlignment.CENTER);
+            Text secondLine = builder.returnStaticText("Skriv inn navnet ditt under:",
+                    "Arial", 25, Color.BLUE, TextAlignment.CENTER);
+
+            //Creates VBox for HBox with Textfield and button and aligns it center
+            VBox topBox = builder.returnVBox3(firstLine, secondLine, nameBox, 30);
+            topBox.setAlignment(Pos.CENTER);
+
+            //Creates Borderpane
+            BorderPane borderPane = new BorderPane();
+            borderPane.setCenter(topBox);
+
+            //Sets scene and returns the scene
+            Scene scene = new Scene(borderPane, 800, 600);
+            return scene;
+        }
     }
 }
