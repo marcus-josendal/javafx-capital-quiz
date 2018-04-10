@@ -1,0 +1,10 @@
+/* IntelliJ can't seem to find my stylesheet, so i have to put it in the source directory */
+
+Button{
+    -fx-border: 1px solid black;
+    -fx-text-decoration: none;
+    -fx-font-size: 30px;
+    -fx-font-weight: 400;
+    -fx-background-color: orange;
+    -fx-font-family: sans-serif;
+}
