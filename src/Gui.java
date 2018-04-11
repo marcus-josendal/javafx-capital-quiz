@@ -44,9 +44,11 @@ public class Gui extends Application {
     //Flag-image
     private ImageView imageView = new ImageView();
 
-
+    /**
+     * Method that starts the application
+     * @param primaryStage This is the game-stage
+     */
     public void start(Stage primaryStage) {
-
 
         //Put question-text in VBox so it's possible to align.
         VBox textBox = new VBox();
@@ -126,6 +128,7 @@ public class Gui extends Application {
             }
         });
 
+
         submitName.setOnAction(event -> {
             submitName.setDefaultButton(false);
             submit.setDefaultButton(true);
@@ -138,17 +141,23 @@ public class Gui extends Application {
         primaryStage.show();
     }
 
-    //Updates Score Text
+    /**
+     * Updates the score text
+     */
     private void updateScoreText(){
         scoreText.setText("Score: " + score);
     }
 
-    //Updates the Question Counter.
+    /**
+     * Updates the question counter
+     */
     private void updateQuestionCounter(){
         questionCounter.setText(contentRefresher + 1 + "/" + questions.returnQuestionListSize());
     }
 
-    //Method when Next-Question button is pressed. Gets next image, question and clears textfield.
+    /**
+     * Returns event that will be triggered when the nextQuestion button is pressed
+     */
     private void returnEvent(){
 
         contentRefresher++;
@@ -162,6 +171,10 @@ public class Gui extends Application {
     //Inner class for start-scene
     class OtherStages {
 
+        /**
+         * The first stage
+         * @return a Stage
+         */
         public Scene returnStartScene(){
 
             //Content for start scene
@@ -186,11 +199,14 @@ public class Gui extends Application {
             return scene;
         }
 
-
+        /**
+         * The last stage
+         * @return a Scene
+         */
         public Scene returnFinishStage(){
 
             //Content for the finish scene
-            Text firstLine = builder.returnStaticText("Takk for at du spilte" + name + "!",
+            Text firstLine = builder.returnStaticText("Takk for at du spilte " + name + "!",
                     "Arial", 40, Color.BLUE, TextAlignment.CENTER);
             Text secondLine = builder.returnStaticText("Din score ble: " + score + ".",
                     "Arial", 40, Color.BLUE, TextAlignment.CENTER);

@@ -30,15 +30,29 @@ public class Questions {
 
 
     }
-    //Returns question as a String
+
+    /**
+     * Returns a question
+     * @param questionId Specify what question you want from the ArrayList
+     * @return The question in form of a string
+     */
     public String returnQuestion(int questionId){
         return questionList.get(questionId);
     }
-    //Returns the size of the questionlist
+
+    /**
+     * Returns size of questionList-array
+     * @return Size of array in form of int
+     */
     public int returnQuestionListSize(){
         return questionList.size();
     }
-    //Returns answer from answerlist
+
+    /**
+     * Returns an answer
+     * @param answerId Specify what answer you want from ArrayList
+     * @return The answer in form of a String
+     */
     public String returnAnswer(int answerId){
         return answerList.get(answerId);
     }

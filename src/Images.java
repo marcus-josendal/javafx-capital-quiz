@@ -3,7 +3,13 @@ import javafx.scene.image.Image;
 import java.util.ArrayList;
 
 public class Images {
-    //Returns an Image. Specify Array-Index, width and the height of the picture.
+    /**
+     * Returns an image from an ArrayList
+     * @param imageId Specifies what piture ID you want
+     * @param width Sets width of the Image
+     * @param height Sets height of the Image
+     * @return Image
+     */
     public Image returnImage(int imageId, int width, int height){
         ArrayList<Image> imageList = new ArrayList<>();
         imageList.add(new Image("images/no.png"));
