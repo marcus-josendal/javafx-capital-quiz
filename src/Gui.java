@@ -14,7 +14,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.util.concurrent.TimeUnit;
 
 public class Gui extends Application {
 
@@ -22,17 +21,16 @@ public class Gui extends Application {
     private Questions questions = new Questions();
     private Builder builder = new Builder();
     private Images images = new Images();
-
+    private OtherStages otherStages = new OtherStages();
 
     //Text and textfield
     private Text scoreText = new Text();
     private Text question = new Text();
     private Text questionCounter = new Text();
+    private String name;
     private TextField textField = new TextField();
     private TextField nameField = new TextField();
 
-    //Inner classes
-    private FirstStage firstStage = new FirstStage();
 
     //Buttons
     private Button nextQuestion = new Button("Neste spørsmål");
@@ -62,10 +60,10 @@ public class Gui extends Application {
         imageView.setFitHeight(400);
         imageView.setFitWidth(600);
 
-        //Sets button to defaul so you can click enter.
+        //Sets button to default so you can click enter.
         nextQuestion.setDefaultButton(false);
-        submit.setDefaultButton(true);
-
+        submit.setDefaultButton(false);
+        submitName.setDefaultButton(true);
 
         //Styles the questions
         question.setFont(new Font("Arial", 35));
@@ -100,13 +98,19 @@ public class Gui extends Application {
         //Setting the different nodes to the borderpane.
         BorderPane borderPane = builder.returnBorderPane(textBox, imageView, mainBottomBox);
 
-        //Actionevent for Next-Question button. Triggers returnEvent method
+        //Actionevent for Next-Question button. Triggers returnEvent and updateQuestionCounter methods. Enables/Disables buttons
         nextQuestion.setOnAction(event -> {
-           returnEvent();
-           updateQuestionCounter();
-           submit.setDisable(false);
-           nextQuestion.setDefaultButton(false);
-           submit.setDefaultButton(true);
+
+            if(contentRefresher == questions.returnQuestionListSize()-1) {
+                primaryStage.setScene(otherStages.returnFinishStage());
+                return;
+            }
+
+            returnEvent();
+            updateQuestionCounter();
+            submit.setDisable(false);
+            nextQuestion.setDefaultButton(false);
+            submit.setDefaultButton(true);
         });
 
         //Actionevent for submit button. Checks if textfield is equals to answer
@@ -116,22 +120,21 @@ public class Gui extends Application {
             submit.setDefaultButton(false);
             nextQuestion.setDefaultButton(true);
 
-            if(textField.getText().toLowerCase().equals(questions.returnAnswer(contentRefresher))){
+            if(textField.getText().toLowerCase().equals(questions.returnAnswer(contentRefresher))) {
                 score += 100;
                 updateScoreText();
             }
         });
 
         submitName.setOnAction(event -> {
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            submitName.setDefaultButton(false);
+            submit.setDefaultButton(true);
+            name = nameField.getText();
+            System.out.println(name);
             primaryStage.setScene(new Scene(borderPane, 700, 600));
         });
 
-        primaryStage.setScene(firstStage.returnStartScene());
+        primaryStage.setScene(otherStages.returnStartScene());
         primaryStage.show();
     }
 
@@ -156,8 +159,8 @@ public class Gui extends Application {
         textField.clear();
     }
 
-    //Inner class for start-stage
-    class FirstStage{
+    //Inner class for start-scene
+    class OtherStages {
 
         public Scene returnStartScene(){
 
@@ -174,7 +177,7 @@ public class Gui extends Application {
             VBox topBox = builder.returnVBox3(firstLine, secondLine, nameBox, 30);
             topBox.setAlignment(Pos.CENTER);
 
-            //Creates Borderpane
+            //Creates Borderpane and sets content
             BorderPane borderPane = new BorderPane();
             borderPane.setCenter(topBox);
 
@@ -182,5 +185,26 @@ public class Gui extends Application {
             Scene scene = new Scene(borderPane, 800, 600);
             return scene;
         }
+
+
+        public Scene returnFinishStage(){
+
+            //Content for the finish scene
+            Text firstLine = builder.returnStaticText("Takk for at du spilte" + name + "!",
+                    "Arial", 40, Color.BLUE, TextAlignment.CENTER);
+            Text secondLine = builder.returnStaticText("Din score ble: " + score + ".",
+                    "Arial", 40, Color.BLUE, TextAlignment.CENTER);
+            VBox finishMessageBox = builder.returnVBox2(firstLine, secondLine, 10);
+            finishMessageBox.setAlignment(Pos.CENTER);
+
+            //Creates Borderpane and sets content
+            BorderPane borderpane = new BorderPane();
+            borderpane.setCenter(finishMessageBox);
+
+            //Sets the scene and returns it
+            Scene scene = new Scene(borderpane, 800, 600);
+            return scene;
+        }
+
     }
 }

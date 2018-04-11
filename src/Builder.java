@@ -63,6 +63,7 @@ public class Builder {
         return vbox;
     }
 
+    //Returns Text. Specify String, font, fonsize, color and text-alignment
     public Text returnStaticText(String content, String font, int fontsize, Color color, TextAlignment textposition){
         Text text = new Text(content);
         text.setFont(new Font(font, fontsize));
